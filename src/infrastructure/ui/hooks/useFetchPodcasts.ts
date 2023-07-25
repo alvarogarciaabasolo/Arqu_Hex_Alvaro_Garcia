@@ -1,5 +1,6 @@
+import { FetchPodcastListUseCase } from '@/application/useCases/fetchPodcastList';
 import { TopPodcast } from '@/domain/models/topPodcast';
-import { podcastRepository } from '@/infrastructure/repositories/podcastRepository';
+import { PodcastRepository } from '@/infrastructure/repositories/podcastRepository';
 import { useState, useEffect } from 'react';
 
 export const useFetchPodcasts = (): {
@@ -21,7 +22,8 @@ export const useFetchPodcasts = (): {
     // Make request to get the updated list of podcasts.
     setLoading(true);
     try {
-      const topPodcast = await podcastRepository.getTopPodcasts();
+      const fetchPodcastsUseCase = new FetchPodcastListUseCase(new PodcastRepository())
+      const topPodcast = await fetchPodcastsUseCase.execute();
       setPodcasts(topPodcast);
       localStorage.setItem('podcasts', JSON.stringify(topPodcast));
       localStorage.setItem('podcastsUpdatedAt', String(Date.now()));

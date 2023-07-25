@@ -1,5 +1,5 @@
-import { Podcast } from "../models/podcast";
-import { TopPodcast } from "../models/topPodcast";
+import { Podcast } from "../../domain/models/podcast";
+import { TopPodcast } from "../../domain/models/topPodcast";
 
 export interface PodcastRepository {
     getPodcast(podcastId: string): Promise<Podcast>;

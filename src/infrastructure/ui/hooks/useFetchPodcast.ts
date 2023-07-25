@@ -1,5 +1,6 @@
+import { FetchPodcastDetailUseCase } from '@/application/useCases/fetchPodcastDetail';
 import { Podcast } from '@/domain/models/podcast';
-import { podcastRepository } from '@/infrastructure/repositories/podcastRepository';
+import { PodcastRepository } from '@/infrastructure/repositories/podcastRepository';
 import { useState, useEffect, useCallback } from 'react';
 
 const toPodcastStorageKey = (podcastId: string) => `podcast:${podcastId}`;
@@ -34,7 +35,8 @@ export const useFetchPodcast = ({
     }
     setLoading(true);
     try {
-      const _podcast = await podcastRepository.getPodcast(podcastId);
+      const fetchPodcastUseCase = new FetchPodcastDetailUseCase(new PodcastRepository())
+      const _podcast = await fetchPodcastUseCase.execute(podcastId);
       setPodcast(_podcast);
       localStorage.setItem(
         toPodcastStorageKey(podcastId),

@@ -39,7 +39,8 @@ export interface PodcastEpisodeResponse {
     wrapperType: string;
   }
 
-export const podcastApiAdapter = {
+class PodcastApiAdapter {
+
   fromResponse(response: PodcastResponse, podcastDescription: string | undefined): Podcast {
     const { results } = response;
       const track = results[0] ?? {};
@@ -69,5 +70,8 @@ export const podcastApiAdapter = {
         ),
       };
     return podcast;
-  },
+  }
+
 };
+
+export const podcastApiAdapter = new PodcastApiAdapter();

@@ -2,9 +2,9 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Home from '@/pages/index';
 import '@testing-library/jest-dom';
-import { useFetchPodcasts } from '@/application/useCases/useFetchPodcasts';
+import { useFetchPodcasts } from '@/infrastructure/ui/hooks/useFetchPodcasts';
 
-jest.mock('@/application/useCases/useFetchPodcasts');
+jest.mock('@/infrastructure/ui/hooks/useFetchPodcasts');
 
 const mockPodcasts = [
   {

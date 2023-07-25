@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { toPodcastPath } from '../../lib/paths';
+import { toPodcastPath } from '../../../../lib/paths';
 import { removeHtmlTags } from '@/lib/utils';
 import Link from 'next/link';
 import { Podcast } from '@/domain/models/podcast';

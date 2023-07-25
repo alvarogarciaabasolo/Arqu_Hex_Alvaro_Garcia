@@ -3,8 +3,8 @@ import { Inter } from 'next/font/google';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { toPodcastPath } from '@/lib/paths';
-import { HeaderLayout } from '@/components/headerLayout';
-import { useFetchPodcasts } from '@/application/useCases/useFetchPodcasts';
+import { HeaderLayout } from '@/infrastructure/ui/components/headerLayout';
+import { useFetchPodcasts } from '@/infrastructure/ui/hooks/useFetchPodcasts';
 
 const inter = Inter({ subsets: ['latin'] });
 

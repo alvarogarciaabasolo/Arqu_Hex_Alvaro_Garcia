@@ -1,6 +1,6 @@
-import { useFetchPodcast } from '@/application/useCases/useFetchPodcast';
-import { PodcastCard } from '@/components/PodcastCard';
-import { HeaderLayout } from '@/components/headerLayout';
+import { PodcastCard } from '@/infrastructure/ui/components/PodcastCard';
+import { HeaderLayout } from '@/infrastructure/ui/components/headerLayout';
+import { useFetchPodcast } from '@/infrastructure/ui/hooks/useFetchPodcast';
 import { removeHtmlTags } from '@/lib/utils';
 import { useRouter } from 'next/router';
 import React from 'react';

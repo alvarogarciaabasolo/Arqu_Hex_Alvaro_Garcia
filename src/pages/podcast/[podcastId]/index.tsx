@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
-import { PodcastCard } from '@/components/PodcastCard';
+import { PodcastCard } from '@/infrastructure/ui/components/PodcastCard';
 import { toPodcastEpisodePath } from '@/lib/paths';
 import { formatTime } from '@/lib/utils';
-import { HeaderLayout } from '@/components/headerLayout';
+import { HeaderLayout } from '@/infrastructure/ui/components/headerLayout';
 import { useRouter } from 'next/router';
-import { useFetchPodcast } from '@/application/useCases/useFetchPodcast';
+import { useFetchPodcast } from '@/infrastructure/ui/hooks/useFetchPodcast';
 
 export default function Podcast() {
   const router = useRouter();

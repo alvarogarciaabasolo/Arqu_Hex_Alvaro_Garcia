@@ -2,9 +2,9 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import PodcastEpisode from '@/pages/podcast/[podcastId]/episode/[episodeId]/index';
 import '@testing-library/jest-dom';
-import { useFetchPodcast } from '@/application/useCases/useFetchPodcast';
+import { useFetchPodcast } from '@/infrastructure/ui/hooks/useFetchPodcast';
 
-jest.mock('@/application/useCases/useFetchPodcast');
+jest.mock('@/infrastructure/ui/hooks/useFetchPodcast');
 
 const mockPodcast = {
   id: '1535809341',

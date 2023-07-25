@@ -1,10 +1,10 @@
 import { Podcast } from "@/domain/models/podcast";
-import { PodcastRepository } from "@/domain/repositories/podcastRepository";
+import { PodcastRepository as IPodcastRepository } from "@/application/repositories/podcastRepository";
 import { PodcastEpisodeResponse, PodcastResponse, podcastApiAdapter } from "../adapters/podcastApiAdapter";
 import { TopPodcastsResponse, topPodcastApiAdapter } from "../adapters/topPodcastsApiAdapter";
 import { TopPodcast } from "@/domain/models/topPodcast";
 
-class Repository implements PodcastRepository {
+export class PodcastRepository implements IPodcastRepository {
     async getPodcast(podcastId: string): Promise<Podcast> {
         const url = this.allOriginUrl(encodeURIComponent(
             `https://itunes.apple.com/lookup?id=${podcastId}&media=podcast&entity=podcastEpisode&limit=20`,
@@ -50,5 +50,3 @@ class Repository implements PodcastRepository {
         return `https://api.allorigins.win/raw?url=${url}`;
     }
 }
-
-export const podcastRepository = new Repository();

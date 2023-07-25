@@ -50,7 +50,8 @@ export interface TopPodcastsResponse {
   };
 }
 
-export const topPodcastApiAdapter = {
+class TopPodcastApiAdapter {
+
   fromResponse(response: TopPodcastsResponse): TopPodcast[] {
     const entries = response.feed.entry;
     if (!entries) {
@@ -63,5 +64,8 @@ export const topPodcastApiAdapter = {
       image: entry['im:image'][2].label,
       url: entry.link.attributes.href,
     }));
-  },
+  }
+
 };
+
+export const topPodcastApiAdapter = new TopPodcastApiAdapter();
