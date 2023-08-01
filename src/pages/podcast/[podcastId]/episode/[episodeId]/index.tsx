@@ -1,7 +1,7 @@
 import { PodcastCard } from '@/infrastructure/ui/components/PodcastCard';
 import { HeaderLayout } from '@/infrastructure/ui/components/headerLayout';
 import { useFetchPodcast } from '@/infrastructure/ui/hooks/useFetchPodcast';
-import { removeHtmlTags } from '@/lib/utils';
+import { removeHtmlTags } from '@/infrastructure/ui/lib/utils';
 import { useRouter } from 'next/router';
 import React from 'react';
 import styled from 'styled-components';

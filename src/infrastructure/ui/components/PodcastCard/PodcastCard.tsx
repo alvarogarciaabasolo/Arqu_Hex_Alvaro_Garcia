@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { toPodcastPath } from '../../../../lib/paths';
-import { removeHtmlTags } from '@/lib/utils';
+import { toPodcastPath } from '../../lib/paths';
+import { removeHtmlTags } from '@/infrastructure/ui/lib/utils';
 import Link from 'next/link';
 import { Podcast } from '@/domain/models/podcast';
 
@@ -21,7 +21,7 @@ export function PodcastCard({ podcast, podcastId }: Props) {
           width={175}
           height={175}
           alt="Podcast Cover Art"
-          src={podcast.artworkUrl600}
+          src={podcast.image}
         />
       </PodcastLink>
       <Separator />

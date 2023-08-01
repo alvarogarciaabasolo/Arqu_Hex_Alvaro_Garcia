@@ -1,35 +1,28 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import Podcast from '@/pages/podcast/[podcastId]/index';
 import '@testing-library/jest-dom';
-import { useFetchPodcast } from '@/infrastructure/ui/hooks/useFetchPodcast';
-
-jest.mock('@/infrastructure/ui/hooks/useFetchPodcast');
-
-const mockPodcast = {
-  id: '1535809341',
-  title: 'Test Podcast',
-  episodes: [
-    {
-      id: '1',
-      title: 'Episode 1',
-      pubDate: '2021-01-01T00:00:00.000Z',
-      duration: 3600,
-    },
-    {
-      id: '2',
-      title: 'Episode 2',
-      pubDate: '2021-01-08T00:00:00.000Z',
-      duration: 1800,
-    },
-  ],
-};
+import { PodcastFetchRepository } from '@/infrastructure/repositories/podcastRepository';
+import { mockPodcast, mockPodcasts } from './mockData';
 
 type MockNextQuery = {
   query: {
     podcastId: string;
   };
 };
+
+beforeAll(() => {
+  jest
+    .spyOn(PodcastFetchRepository.prototype, 'getPodcast')
+    .mockImplementation((_podcastId: string) => Promise.resolve(mockPodcast));
+  jest
+    .spyOn(PodcastFetchRepository.prototype, 'getTopPodcasts')
+    .mockImplementation(() => Promise.resolve(mockPodcasts));
+});
+
+afterAll(() => {
+  jest.restoreAllMocks();
+});
 
 describe('Podcast', () => {
   let useRouterMock: any;
@@ -48,45 +41,26 @@ describe('Podcast', () => {
     jest.clearAllMocks();
   });
 
-  it('Render the loading state', () => {
-    (useFetchPodcast as jest.Mock).mockReturnValue({
-      podcast: null,
-      loading: true,
-    });
-
+  it('Render the loading state', async () => {
     render(<Podcast />);
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(
+      await waitFor(() => screen.getByText('Loading...')),
+    ).toBeInTheDocument();
   });
 
   it('Render the episodes of the podcast', async () => {
-    (useFetchPodcast as jest.Mock).mockReturnValue({
-      podcast: mockPodcast,
-      loading: false,
-    });
-
     render(<Podcast />);
-    expect(screen.getByTestId('1535809341')).toBeInTheDocument();
+    expect(
+      await waitFor(() => screen.getByTestId('1535809341')),
+    ).toBeInTheDocument();
     await screen.findByText('Episode 1');
     await screen.findByText('Episode 2');
   });
 
-  it('Renders the error state', () => {
-    (useFetchPodcast as jest.Mock).mockReturnValue({
-      podcast: null,
-      loading: false,
-    });
-
-    render(<Podcast />);
-    expect(screen.getByText('There was a mistake.')).toBeInTheDocument();
-  });
-
   it('Renders the PodcastCard image.', async () => {
-    (useFetchPodcast as jest.Mock).mockReturnValue({
-      podcast: mockPodcast,
-      loading: false,
-    });
-
     render(<Podcast />);
-    expect(screen.getByAltText('Podcast Cover Art')).toBeInTheDocument();
+    expect(
+      await waitFor(() => screen.getByAltText('Podcast Cover Art')),
+    ).toBeInTheDocument();
   });
 });

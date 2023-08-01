@@ -1,31 +1,34 @@
-import { ChangeEvent, useMemo, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Inter } from 'next/font/google';
 import styled from 'styled-components';
 import Link from 'next/link';
-import { toPodcastPath } from '@/lib/paths';
+import { toPodcastPath } from '@/infrastructure/ui/lib/paths';
 import { HeaderLayout } from '@/infrastructure/ui/components/headerLayout';
 import { useFetchPodcasts } from '@/infrastructure/ui/hooks/useFetchPodcasts';
+import { FilterPodcastsUseCase } from '@/application/useCases/filterPodcastsUseCase';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   const { loading, podcasts } = useFetchPodcasts();
   const [searchValue, setSearchValue] = useState<string>('');
+  const [filteredPodcasts, setFilteredPodcasts] = useState(podcasts);
 
   const handleInputChange = (evt: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(evt.target.value.trim().toLowerCase());
   };
 
-  const filteredPodcasts = useMemo(() => {
-    return podcasts
-      ? searchValue
-        ? podcasts.filter(
-            (podcast) =>
-              podcast.title.toLowerCase().includes(searchValue) ||
-              podcast.author.toLowerCase().includes(searchValue),
-          )
-        : podcasts
-      : [];
+  useEffect(() => {
+    const filterPodcasts = () => {
+      if (searchValue && podcasts) {
+        const filterPodcastsUseCase = new FilterPodcastsUseCase(podcasts);
+        const filtered = filterPodcastsUseCase.execute(searchValue);
+        setFilteredPodcasts(filtered);
+      } else {
+        setFilteredPodcasts(podcasts);
+      }
+    };
+    filterPodcasts();
   }, [podcasts, searchValue]);
 
   let content: React.ReactNode = null;
@@ -38,7 +41,7 @@ export default function Home() {
     content = (
       <Wrapper>
         <Header>
-          <PodcastCount>{filteredPodcasts.length}</PodcastCount>
+          <PodcastCount>{filteredPodcasts?.length}</PodcastCount>
           <SearchInput
             placeholder="Filter podcasts..."
             type="search"
@@ -46,7 +49,7 @@ export default function Home() {
           />
         </Header>
         <Podcasts>
-          {filteredPodcasts.map((podcast) => (
+          {filteredPodcasts?.map((podcast) => (
             <Podcast
               role="link"
               key={podcast.id}

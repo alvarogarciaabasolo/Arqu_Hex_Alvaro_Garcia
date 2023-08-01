@@ -1,6 +1,7 @@
 import { FetchPodcastListUseCase } from '@/application/useCases/fetchPodcastList';
 import { TopPodcast } from '@/domain/models/topPodcast';
-import { PodcastRepository } from '@/infrastructure/repositories/podcastRepository';
+import { PodcastFetchRepository } from '@/infrastructure/repositories/podcastRepository';
+import { CacheService } from '@/infrastructure/services/cacheService';
 import { useState, useEffect } from 'react';
 
 export const useFetchPodcasts = (): {
@@ -11,22 +12,14 @@ export const useFetchPodcasts = (): {
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetchPodcasts = async () => {
-    // Check if podcasts are already stored in localStorage
-    const storedPodcasts = localStorage.getItem('podcasts');
-    const storedDate = Number(localStorage.getItem('podcastsUpdatedAt'));
-    // If the podcasts have already been stored and no more than one day has passed, retrieve them from localStorage.
-    if (storedPodcasts && storedDate && Date.now() - storedDate < 86400000) {
-      setPodcasts(JSON.parse(storedPodcasts));
-      return;
-    }
-    // Make request to get the updated list of podcasts.
-    setLoading(true);
     try {
-      const fetchPodcastsUseCase = new FetchPodcastListUseCase(new PodcastRepository())
+      setLoading(true);
+      const fetchPodcastsUseCase = new FetchPodcastListUseCase(
+        new PodcastFetchRepository(),
+        new CacheService(),
+      );
       const topPodcast = await fetchPodcastsUseCase.execute();
       setPodcasts(topPodcast);
-      localStorage.setItem('podcasts', JSON.stringify(topPodcast));
-      localStorage.setItem('podcastsUpdatedAt', String(Date.now()));
     } catch (err) {
       console.trace(err);
     } finally {

@@ -50,7 +50,7 @@ export interface TopPodcastsResponse {
   };
 }
 
-class TopPodcastApiAdapter {
+class TopPodcastApiMapper {
 
   fromResponse(response: TopPodcastsResponse): TopPodcast[] {
     const entries = response.feed.entry;
@@ -68,4 +68,4 @@ class TopPodcastApiAdapter {
 
 };
 
-export const topPodcastApiAdapter = new TopPodcastApiAdapter();
+export const topPodcastApiMapper = new TopPodcastApiMapper();
